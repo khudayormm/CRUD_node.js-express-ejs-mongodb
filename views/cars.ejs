@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/lux/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/7c1b1357c1.js" crossorigin="anonymous"></script>
+    <title>My car CRUD application in Node.JS Express MongoDB</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
+</head>
+<body>
+    <%- include('navbar') %>
+    <div>
+        <div class="container">
+            <div class="card text-left py-5 my-5">
+              <div class="card-body">
+                  <h4 class="card-title">LIST OF CARS</h4>
+                <hr>
+                <table class="table table-hover">
+                    <thead>
+                      <tr class="table-info">
+                       <form action="/sort" method="POST">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                          <th scope="col"><button type="button" disabled class="btn btn-outline-secondary btn-sm">N</button></th>
+                          <th scope="col"><button type="submit" name="name" class="btn btn-outline-secondary btn-sm">Name</button></th>
+                          <th scope="col"><button type="submit" name="brand" class="btn btn-outline-secondary btn-sm">Brand</button></th>
+                          <th scope="col"><button type="submit" name="price" class="btn btn-outline-secondary btn-sm">Price ($)</button></th>
+                          <th scope="col"><button type="submit" name="year" class="btn btn-outline-secondary btn-sm">Year</button></th>
+                          <th scope="col"><button type="submit" name="country" class="btn btn-outline-secondary btn-sm">Country</button></th>
+                        </div>
+                      </form> 
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(let i = 0; i < posts.length; i++) { %>
+                      <tr class="table-default">
+                        <th scope="row"><%= i+1 %></th>
+                        <td><%= posts[i].name %></td>
+                        <td><%= posts[i].brand %></td>
+                        <td><%= posts[i].price %></td>
+                        <td><%= posts[i].year %></td>
+                        <td><%= posts[i].country %></td>
+                        <td style="width: 20px;">
+                          <button onclick="getData('<%= i%>')"  type="button" id="<%=i %>" name="<%=posts[i]._id %>" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          
+                        </td>
+                        <td style="width: 20px;"> 
+                          <button onclick="delData('<%= i%>')" type="button" id="<%=i %>" name="<%=posts[i]._id %>" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal2">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <% } %>
+                    </tbody>
+                  </table> 
+
+
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                  <div class="modal-content md-10">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Edit the Car</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="myForm" action="/cars" method="POST">
+
+                        <script>
+                          function getData(y) {
+                            var x = document.getElementById(y).name;
+                            document.getElementById("carId").value = x;
+                            const car = document.getElementById(y).value;
+                            console.log(car);
+                          }
+                        </script>
+                              
+                        <div class="row text-left py-5" style="font-size: 14px;">
+                            <div hidden class="col-12">
+                              <input type="text" class="form-control" name="carId" id="carId">
+                            </div>
+                            <div class="col-6">
+                                <label for="name">Name</label>
+                                <input type="text" name="name" class="form-control" id="name" data-error="#errNm1" placeholder="Car name">
+                                <small id="errNm1" class="form-text text-danger">  </small>
+                            </div>
+                            <div class="col-6">
+                                <label for="brand">Brand</label>
+                                <input type="text" name="brand" class="form-control" id="brand" data-error="#errNm2" placeholder="Brand name">
+                                <small id="errNm2" class="form-text text-danger">  </small>
+                            </div>
+                        </div>
+
+                        <div class="row text-left py-5" style="font-size: 14px;">
+                            <div class="col-4">
+                                <label for="price">Price</label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                    <div class="input-group-text">$</div>
+                                    </div>
+                                    <input type="number" name="price" class="form-control" id="price" data-error="#errNm3" placeholder="10000">
+                                  </div>
+                                  <small id="errNm3" class="form-text text-danger">  </small>
+                            </div>
+                            <div class="col-4">
+                                <label for="date">Year</label>
+                                <input type="number" name="year" class="form-control" id="date" data-error="#errNm4" placeholder="1990">
+                                <small id="errNm4" class="form-text text-danger">  </small>
+                            </div>
+                            <div class="col-4">
+                                <label for="country">Country</label>
+                                <input type="text" name="country" class="form-control" id="country" data-error="#errNm5" placeholder="Country">
+                                <small id="errNm5" class="form-text text-danger">  </small>
+                            </div> 
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" onclick="reload">Save changes</button>
+                          </div>
+                        </form>
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                <!-- Button trigger modal -->
+                <script>
+                  function delData(y) {
+                    var x = document.getElementById(y).name;
+                    document.getElementById("delId").value = x;
+                  }
+                </script>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Are you sure you want to permanently delete this car?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form action="/delcar" method="POST">
+                          <button type="submit" name="delId" id="delId" class="btn btn-danger">Delete the Car</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+      jQuery(function($) {
+        $('#myForm').validate({
+          rules: {
+              name: {
+                  required: true,
+                  minlength: 3,
+                  maxlength: 30
+              },
+              brand: {
+                  required: true,
+                  minlength: 3,
+                  maxlength: 30
+              },
+              price: {
+                  required: true,
+                  minlength: 4,
+                  maxlength: 6
+              },
+              year: {
+                  required: true,
+                  minlength: 4,
+              },
+              country: {
+                  required: true,
+                  minlength: 3,
+                  maxlength: 30
+              }
+          },
+          messages: {
+              name: {
+                  required: "Car name is required",
+                  minlength: "Please enter at least 3 characters.",
+                  maxlength: "Please enter no more than 30 characters."
+              },
+              brand: {
+                  required: "Brand name is required",
+                  minlength: "Please enter at least 3 characters.",
+                  maxlength: "Please enter no more than 30 characters."
+              },
+              price: {
+                  required: "Price is required",
+                  minlength: "Min: 10000",
+                  maxlength: "Max: 1000000"
+              },
+              year: {
+                  required: "Year is required",
+                  minlength: "min 1000"
+              },
+              country: {
+                  required: "Country is required",
+                  minlength: "Please enter at least 3 characters.",
+                  maxlength: "Please enter no more than 30 characters."
+              }
+          },
+  
+          errorPlacement: function(error, element) {
+              var placement = $(element).data('error');
+              if (placement) {
+                $(placement).append(error)
+              } else {
+                error.insertAfter(element);
+              }
+          },
+  
+      });
+      });
+      </script>
+
+
+    <%- include('footer') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+     integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+     integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>

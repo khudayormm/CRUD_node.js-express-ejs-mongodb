@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/lux/bootstrap.min.css">
+    <title>My car CRUD application in Node.JS Express MongoDB</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
+</head>
+<body>
+    <%- include('navbar') %>
+    <div>
+        <div class="container">
+            <div class="card text-center py-5 my-5">
+              <div class="card-body">
+                <h4 class="card-title">CREATE THE CAR</h4>
+                <form id="form" action="/create" method="POST">
+                    <div class="row text-left py-5" style="font-size: 14px;">
+                        <div class="col-6">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" class="form-control" data-error="#errNm1" id="name" placeholder="Car name">
+                            <small id="errNm1" class="form-text text-danger">  </small>
+                        </div>
+                        <div class="col-6">
+                            <label for="brand">Brand</label>
+                            <input type="text" name="brand" class="form-control" data-error="#errNm2" id="brand" placeholder="Brand name">
+                            <small id="errNm2" class="form-text text-danger">  </small>
+                        </div>
+                    </div>
+
+                    <div class="row text-left py-5" style="font-size: 14px;">
+                        <div class="col-4">
+                            <label for="price">Price</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">$</div>
+                                </div>
+                                <input type="number" name="price" class="form-control" data-error="#errNm3" id="price" placeholder="10000">
+                            </div>
+                            <small id="errNm3" class="form-text text-danger">  </small>
+                        </div>
+                        <div class="col-4">
+                            <label for="date">Year</label>
+                            <input type="number" name="year" class="form-control" data-error="#errNm4" id="date" placeholder="1990">
+                            <small id="errNm4" class="form-text text-danger">  </small>
+                        </div>
+                        <div class="col-4">
+                            <label for="country">Country</label>
+                            <input type="text" name="country" class="form-control" data-error="#errNm5" id="country" placeholder="Country">
+                            <small id="errNm5" class="form-text text-danger">  </small>
+                        </div>            
+                    </div>
+                <div class="text-left">
+                    <button type="submit"  class="btn btn-outline-primary" style="width: 180px; font-size: 14px;">CREATE</button>
+                    <a class="btn btn-outline-info" href="/cars" role="button" style="width: 180px; font-size: 14px;">LIST OF CAR</a>
+                </div>
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        jQuery(function($) {
+          $('#form').validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 30
+                },
+                brand: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 30
+                },
+                price: {
+                    required: true,
+                    minlength: 4,
+                    maxlength: 6
+                },
+                year: {
+                    required: true,
+                    minlength: 4,
+                },
+                country: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 30
+                }
+            },
+            messages: {
+                name: {
+                    required: "Car name is required",
+                    minlength: "Please enter at least 3 characters.",
+                    maxlength: "Please enter no more than 30 characters."
+                },
+                brand: {
+                    required: "Brand name is required",
+                    minlength: "Please enter at least 3 characters.",
+                    maxlength: "Please enter no more than 30 characters."
+                },
+                price: {
+                    required: "Price is required",
+                    minlength: "Min: 10000",
+                    maxlength: "Max: 1000000"
+                },
+                year: {
+                    required: "Year is required",
+                    minlength: "min 1000"
+                },
+                country: {
+                    required: "Country is required",
+                    minlength: "Please enter at least 3 characters.",
+                    maxlength: "Please enter no more than 30 characters."
+                }
+            },
+    
+            errorPlacement: function(error, element) {
+                var placement = $(element).data('error');
+                if (placement) {
+                  $(placement).append(error)
+                } else {
+                  error.insertAfter(element);
+                }
+            },
+    
+        });
+        });
+        </script>
+
+
+    <%- include('footer') %>
+   
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+     integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+     integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>

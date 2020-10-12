@@ -19,6 +19,19 @@ router.get('/create', (req, res) => {
 }); 
 
 router.post('/create', async (req, res) => {
+        const checkCar = await Car.find({ 
+            name: req.body.name,
+            brand: req.body.brand,
+            price: req.body.price, 
+            year: req.body.year,
+            country: req.body.country
+         });
+
+        if (checkCar.length > 0)
+            return res.status(400).render('create', {
+                errorCheck: 'Already exist!'
+            });
+    
     const car = new Car({
         name: req.body.name,
         brand: req.body.brand,
